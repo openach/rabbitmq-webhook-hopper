@@ -1,29 +1,33 @@
 nginx:
     build: ./nginx
     links:
-        - node1:node1
-        - node2:node2
-        - node3:node3
+        - node-api1:node-api1
+        - node-api2:node-api2
+        - node-api3:node-api3
     ports:
         - "80:80"
-node1:
-    build: ./node
+node-api1:
+    build: ./node-api
+    links:
+        - redis
+    ports:
+        - "8081:8081"
+node-api2:
+    build: ./node-api
     links:
         - redis
     ports:
         - "8080"
-node2:
-    build: ./node
+node-api3:
+    build: ./node-api
     links:
         - redis
     ports:
         - "8080"
-node3:
-    build: ./node
+node-worker:
+    build: ./node-worker
     links:
         - redis
-    ports:
-        - "8080"
 redis:
     image: redis
     ports:
