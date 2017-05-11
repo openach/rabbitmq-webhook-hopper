@@ -18,7 +18,7 @@ To shut down the application, run:
 docker-compose down
 ```
 ## Adding Webhooks to the Queue
-To add a webhook to the queu, POST a request to http://localhost/api/ with the following parameters:
+To add a webhook to the queue, POST a request to http://localhost/api/ with the following parameters:
 
 - _url_ - The URL of the webhook
 - _method_ - Either GET or POST
