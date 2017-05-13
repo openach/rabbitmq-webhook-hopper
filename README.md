@@ -77,7 +77,7 @@ The _retryDelay_ option specifies the time in milliseconds to dealy between retr
     "url": "http://webhook.site/",
     "body": { "var1": "value1", "var2": "value2" },
     "maxAttempts": 5,
-    "retryDelay": 5000 // waith 5 seconds before trying again
+    "retryDelay": 5000 // wait 5 seconds before trying again
 }
 ```
 
@@ -93,7 +93,7 @@ The _retryStrategy_ option specifies the type of responses that will be interpre
     "url": "http://webhook.site/",
     "body": { "var1": "value1", "var2": "value2" },
     "maxAttempts": 5,
-    "retryDelay": 5000 // waith 5 seconds before trying again
+    "retryDelay": 5000 // wait 5 seconds before trying again
     "retryStrategy": "HTTPOrNetworkError"
 }
 ```
