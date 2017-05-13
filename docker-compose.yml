@@ -1,34 +1,12 @@
-nginx:
-    build: ./nginx
-    links:
-        - node-api1:node-api1
-        - node-api2:node-api2
-        - node-api3:node-api3
+version: "2"
+services:
+  rabbitmq:
+    image: rabbitmq
     ports:
-        - "80:80"
-node-api1:
-    build: ./node-api
-    links:
-        - redis
-    ports:
-        - "8081:8081"
-node-api2:
-    build: ./node-api
-    links:
-        - redis
-    ports:
-        - "8080"
-node-api3:
-    build: ./node-api
-    links:
-        - redis
-    ports:
-        - "8080"
-node-worker:
+      - 5672:5672
+  node-worker:
     build: ./node-worker
     links:
-        - redis
-redis:
-    image: redis
-    ports:
-        - "6379"
+      - rabbitmq
+    depends_on:
+      - rabbitmq
