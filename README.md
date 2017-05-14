@@ -99,4 +99,4 @@ The _retryStrategy_ option specifies the type of responses that will be interpre
 ```
 
 ## Confirmations
-The worker makes use of RabbitMQ's _ack_ and _nack_.  Assuming the webhook was successfully called with no HTTP 5xx or network errors (as configured via retryStrategy), the message will be acknowledged via _ack_.  If any error occurrs - either in delivery or parsing of the JSON - the message will be acknowledged with _nack_.
+The worker makes use of RabbitMQ's _ack_ and _reject_ (without requeue).  Assuming the webhook was successfully called with no HTTP 5xx or network errors (as configured via retryStrategy), the message will be acknowledged via _ack_.  If any error occurrs - either in delivery or parsing of the JSON - the message will be rejected, without requeuing.
