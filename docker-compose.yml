@@ -4,6 +4,9 @@ services:
     image: rabbitmq
     ports:
       - 5672:5672
+    volumes:
+      - ./rabbitmq/log:/data/log
+      - ./rabbitmq/data:/data/mnesia
   node-worker:
     build: ./node-worker
     links:

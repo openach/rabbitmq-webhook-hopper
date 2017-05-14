@@ -1,3 +1,6 @@
+// The worker is in a setTimeout to delay startup
+// because the RabbitMQ container takes several seconds
+// to properly start.
 setTimeout( function(){
 
 var 	amqp    = require('amqplib/callback_api'),
@@ -7,7 +10,7 @@ var 	amqp    = require('amqplib/callback_api'),
 	rabbitmq_url = 'amqp://guest:guest@rabbitmq:5672',
 	rabbitmq_opts = {},
 	opts = {
-		maxAttempts: 0,
+		maxAttempts: 1,
 		retryDelay: 5000,
 		retryStrategy: request.RetryStrategies.HTTPOrNetworkError,
 	};
@@ -29,7 +32,7 @@ amqp.connect(rabbitmq_url, rabbitmq_opts, function(err, conn) {
 				data = JSON.parse(msg.content);
 			} catch (e) {
 				console.log(" [x] Failed: %s is not valid JSON.", msg.content.toString());
-				ch.nack(msg);
+				ch.reject(msg,false);
 				return;
 			}
 
@@ -37,7 +40,7 @@ amqp.connect(rabbitmq_url, rabbitmq_opts, function(err, conn) {
 			var body = JSON.stringify(data.body);
 
 			// Check for any retry options that may be set
-			if ( data.maxAttempts > 0 ) {
+			if ( data.maxAttempts > 1 ) {
 				opts.maxAttempts = data.maxAttempts;
 			}
 			if ( data.retryDelay > 0 ) {
@@ -68,8 +71,8 @@ amqp.connect(rabbitmq_url, rabbitmq_opts, function(err, conn) {
 					ch.ack(msg);
 				}
 				else {
-					console.log(" [!] Incomplete: Delivery failed after " + response.attempts + "attempts. %j", msg.content.toString());
-					ch.nack(msg);
+					console.log(" [!] Incomplete: Delivery failed after " + opts.maxAttempts + " attempts. %j", msg.content.toString());
+					ch.reject(msg,false);
 				}
 			});
 		});
